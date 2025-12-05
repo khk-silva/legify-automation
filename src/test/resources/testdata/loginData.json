@@ -1,0 +1,10 @@
+{
+  "validUser": {
+    "username": "hirunis@echonlabs.com",
+    "password": "H@12345678h"
+  },
+  "invalidUser": {
+    "username": "hirunis@echonlabs.com",
+    "password": "H@12345678"
+  }
+}
