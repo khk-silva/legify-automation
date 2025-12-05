@@ -1,6 +1,7 @@
 */bin/*
 
 *.class
+.gitattributes
 
 # Package Files #
 *.jar
@@ -34,6 +35,7 @@ target/
 results/
 doc/
 /logs/
+.mvn
 
 # Markdown
 *.md.html
