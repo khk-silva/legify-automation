@@ -141,7 +141,7 @@ public class Hook {
         if ("grid".equals(remote)) {
 
             try {
-                driver = new RemoteWebDriver(new URL("https://qa.app.legify.echonlabs.com/"), chromeOptions);
+                driver = new RemoteWebDriver(new URL(baseUrl), chromeOptions);
             } catch (MalformedURLException e) {
                 LOGGER.error("Error", e);
             }

@@ -7,33 +7,31 @@ import com.legify.selenium.runners.Hook;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.List;
 
+@Slf4j
 public class BaseSteps {
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseSteps.class);
 
-    @Autowired
-    private Hook hooks;
+    private final Hook hooks;
+    private final List<BasePage> pages;
 
-    @Autowired
-    private List<BasePage> pages;
+    public BaseSteps(Hook hooks, List<BasePage> pages) {
+        this.hooks = hooks;
+        this.pages = pages;
+    }
 
     @Before(order = 1)
     public void logBeforeScenario(final Scenario scenario) {
-        LOGGER.debug(StringUtils.rightPad("Starting scenario:", 20) + "[{}] - [{}]",
-                getFeatureName(scenario),
-                scenario.getName());
+        log.info("{}[{}] - [{}]", StringUtils.rightPad("Starting scenario:", 20), getFeatureName(scenario), scenario.getName());
     }
 
     @Before(order = 2)
@@ -53,10 +51,8 @@ public class BaseSteps {
 
     @After(order = Integer.MAX_VALUE)
     public void logAfterScenario(final Scenario scenario) {
-        LOGGER.debug(StringUtils.rightPad("Finished scenario:", 20) + "[{}] - [{}] [{}]",
-                getFeatureName(scenario),
-                scenario.getName(),
-                scenario.getStatus());
+        log.info("{}[{}] - [{}] [{}]", StringUtils.rightPad("Finished scenario:", 20),
+                getFeatureName(scenario), scenario.getName(), scenario.getStatus());
     }
 
     private String getFeatureName(Scenario scenario) {
