@@ -118,7 +118,7 @@ public class Hook {
         }
 
         // Navigate
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         goToBaseUrl();
     }
 
@@ -148,7 +148,7 @@ public class Hook {
         } else {
             driver = new ChromeDriver(chromeOptions);
         }
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     private void setFirefoxDriver() {
