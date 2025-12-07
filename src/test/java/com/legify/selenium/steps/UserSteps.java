@@ -26,6 +26,8 @@ public class UserSteps {
         loginPage.loginToApp(username, password);
     }
 
+
+
     @When("I click the Users menu icon")
     public void iClickTheUsersMenuIcon() {
         userPage.navigateToUsersPage();
