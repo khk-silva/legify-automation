@@ -6,5 +6,15 @@
   "invalidUser": {
     "username": "hirunis@echonlabs.com",
     "password": "H@12345678"
+  },
+
+  "newUser1": {
+
+    "salutation": "Mrs.",
+    "firstName": "Kasun",
+    "lastName": "Silva",
+    "email": "kasun.siiilva+rauto@test.com",
+    "country": "Algeria",
+    "role": "User"
   }
 }
