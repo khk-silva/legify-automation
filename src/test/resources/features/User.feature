@@ -9,4 +9,4 @@ Feature: Create new user flow
     Then I should see the Create New User window
     And I fill the Create User form with test data "newUser1"
     And I save the new user
-#    Then The new user should be created successfully
+    Then The new user should be created successfully "newUser1"

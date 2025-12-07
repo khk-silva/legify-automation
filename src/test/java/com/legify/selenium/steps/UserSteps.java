@@ -70,9 +70,10 @@ public class UserSteps {
         userPage.clickSubmitButton();
     }
 
-    @Then("The new user should be created successfully")
-    public void newUserShouldBeCreatedSuccessfully() {
-        // Add validations later (snackbar / table search)
+    @Then("The new user should be created successfully {string}")
+    public void newUserShouldBeCreatedSuccessfully(String userKey) {
+        String email = JsonReader.getUserData(userKey, "email");
+        userPage.isUserCreatedSuccessfully(email);
         System.out.println("User creation validation placeholder");
     }
 }

@@ -214,5 +214,24 @@ public class UserPage implements BasePage {
                 By.cssSelector(".loading-overlay, .spinner, .mat-progress-spinner")));
     }
 
+
+    public boolean isUserCreatedSuccessfully(String email) {
+        try {
+            // Wait until the Users table is visible (page loaded)
+            hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//th[text()='User ID']"))
+            );
+
+            // Verify the newly created user's email exists in the table
+            By emailCell = By.xpath("//tbody//td/div[text()='" + email + "']");
+            hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(emailCell));
+
+            return true; // Success
+        } catch (TimeoutException e) {
+            return false; // Not found
+        }
+    }
+
+
 }
 
