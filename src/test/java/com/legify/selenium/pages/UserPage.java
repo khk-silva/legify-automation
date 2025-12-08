@@ -30,7 +30,6 @@ public class UserPage implements BasePage {
 
     private final By salutationDropdownBy =
             By.xpath("//mat-select[@formcontrolname='salutation']//div[contains(@class,'mat-select-trigger')]");
-    private String salutationOptionXpath = "//mat-option//span[normalize-space()='%s']";
 
     private final By firstNameBy = By.id("firstName");
 
@@ -42,11 +41,8 @@ public class UserPage implements BasePage {
 
     private final By countryDropdownBy =
             By.xpath("//mat-select[@formcontrolname='country']//div[contains(@class,'mat-select-trigger')]");
-    private String countryOptionXpath = "//mat-option//span[normalize-space()='%s']";
 
     private final By roleRadioGroupBy = By.xpath("//mat-radio-group[@formcontrolname='role']");
-    private String roleOptionXpath =
-            "//mat-radio-button//span[contains(@class,'mat-radio-label-content') and normalize-space()='%s']";
 
     private final By submitBtnBy = By.xpath("//button[normalize-space()='Submit']");
 
@@ -139,6 +135,7 @@ public class UserPage implements BasePage {
         hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
         dropdown.click();
 
+        String salutationOptionXpath = "//mat-option//span[normalize-space()='%s']";
         By optionBy = By.xpath(String.format(salutationOptionXpath, value));
         hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(optionBy));
 
@@ -180,6 +177,7 @@ public class UserPage implements BasePage {
         hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
         dropdown.click();
 
+        String countryOptionXpath = "//mat-option//span[normalize-space()='%s']";
         By optionBy = By.xpath(String.format(countryOptionXpath, countryName));
         hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(optionBy));
 
@@ -191,6 +189,7 @@ public class UserPage implements BasePage {
 
         hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(roleRadioGroupBy));
 
+        String roleOptionXpath = "//mat-radio-button//span[contains(@class,'mat-radio-label-content') and normalize-space()='%s']";
         By radioOptionBy = By.xpath(String.format(roleOptionXpath, roleName));
         WebElement radioOption = hooks.getWait().until(ExpectedConditions.elementToBeClickable(radioOptionBy));
 
@@ -215,7 +214,7 @@ public class UserPage implements BasePage {
     }
 
 
-    public boolean isUserCreatedSuccessfully(String email) {
+    public void isUserCreatedSuccessfully(String email) {
         try {
             // Wait until the Users table is visible (page loaded)
             hooks.getWait().until(
@@ -226,9 +225,7 @@ public class UserPage implements BasePage {
             By emailCell = By.xpath("//tbody//td/div[text()='" + email + "']");
             hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(emailCell));
 
-            return true; // Success
-        } catch (TimeoutException e) {
-            return false; // Not found
+        } catch (TimeoutException ignored) {
         }
     }
 
