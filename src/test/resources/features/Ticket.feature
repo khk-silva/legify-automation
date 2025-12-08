@@ -8,3 +8,6 @@ Feature: Ticket module flow
     Then I should see the Tickets page
     When I click the Open Ticket button
     Then The Open Ticket window should be displayed
+    When I fill the Ticket form with test data "newTicket1"
+    And I submit the new ticket
+    Then The new ticket should be created successfully

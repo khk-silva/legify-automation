@@ -1,8 +1,7 @@
 package com.legify.selenium.pages;
 
 import com.legify.selenium.runners.Hook;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,12 @@ public class TicketPage implements BasePage {
 
     @FindBy(xpath = "//button[contains(.,'Open Ticket')]")
     private WebElement openTicketButton;
+
+    private final By subjectInputBy = By.id("subject");
+    private final By descriptionInputBy = By.id("description");
+    private final By submitBtnBy = By.xpath("//button[normalize-space()='Submit']");
+
+    private final By loaderBy = By.cssSelector(".loading-overlay");
 
 
 
@@ -101,4 +106,95 @@ public class TicketPage implements BasePage {
     public boolean isOpenTicketWindowDisplayed() {
         return hooks.getWait().until(ExpectedConditions.visibilityOf(openTicketButton)).isDisplayed();
     }
+
+
+    // Wait for loader to disappear
+    public void waitForLoaderToDisappear() {
+        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+    }
+
+    // Select Priority
+    public void selectFromDropdown(String formControlName, String value) {
+
+        By dropdownBy = By.xpath("//mat-select[@formcontrolname='" + formControlName + "']");
+        By panelBy = By.cssSelector(".mat-select-panel");
+        By optionBy = By.xpath("//mat-option//span[normalize-space()='" + value + "']");
+
+        int attempts = 0;
+
+        while (attempts < 3) {
+            try {
+                // Click dropdown
+                WebElement dropdown = hooks.getWait().until(
+                        ExpectedConditions.elementToBeClickable(dropdownBy)
+                );
+                dropdown.click();
+
+                // Wait for panel to appear
+                hooks.getWait().until(
+                        ExpectedConditions.visibilityOfElementLocated(panelBy)
+                );
+
+                // Select the option
+                WebElement option = hooks.getWait().until(
+                        ExpectedConditions.elementToBeClickable(optionBy)
+                );
+                option.click();
+                return;
+
+            } catch (Exception ex) {
+                attempts++;
+                if (attempts == 3) {
+                    throw ex;
+                }
+            }
+        }
+    }
+
+
+
+    // Enter Subject
+    public void enterSubject(String subject) {
+        waitForLoaderToDisappear();
+
+        WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(subjectInputBy));
+        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", input);
+        input.clear();
+        input.sendKeys(subject);
+    }
+
+    // Enter Description
+    public void enterDescription(String description) {
+        waitForLoaderToDisappear();
+
+        WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(descriptionInputBy));
+        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", input);
+        input.clear();
+        input.sendKeys(description);
+    }
+
+    // Click Submit
+    public void clickSubmit() {
+        waitForLoaderToDisappear();
+
+        WebElement submitBtn = hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(submitBtnBy));
+        hooks.getWait().until(driver -> submitBtn.isEnabled());
+
+        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", submitBtn);
+        hooks.getWait().until(ExpectedConditions.elementToBeClickable(submitBtn)).click();
+
+        // Wait until loader disappears after submit
+        waitForLoaderToDisappear();
+    }
+
+    // Verify ticket submitted successfully (basic check: modal closed)
+    public boolean isTicketSubmitted() {
+        try {
+            hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(submitBtnBy));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
 }
+

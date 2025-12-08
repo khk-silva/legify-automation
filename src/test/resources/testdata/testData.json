@@ -16,5 +16,13 @@
     "email": "kasun.slva+rauto@test.com",
     "country": "Algeria",
     "role": "User"
+  },
+
+  "newTicket1": {
+
+    "priority": "Low",
+    "category": "Performance Issue",
+    "subject": "Test subject",
+    "description": "test Description"
   }
 }

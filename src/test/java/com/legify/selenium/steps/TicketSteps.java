@@ -51,4 +51,31 @@ public class TicketSteps {
     public void verifyOpenTicketWindow() {
         assertTrue(ticketPage.isOpenTicketWindowDisplayed(), "Open Ticket window is not displayed");
     }
+
+    @When("I fill the Ticket form with test data {string}")
+    public void iFillTicketFormWithTestData(String ticketKey) {
+
+        String priority = JsonReader.getTicketData(ticketKey, "priority");
+        String category = JsonReader.getTicketData(ticketKey, "category");
+        String subject = JsonReader.getTicketData(ticketKey, "subject");
+        String description = JsonReader.getTicketData(ticketKey, "description");
+
+       // ticketPage.selectPriority(priority);
+        //ticketPage.selectCategory(category);
+        ticketPage.selectFromDropdown("priority", priority);
+        ticketPage.selectFromDropdown("category", category);
+        ticketPage.enterSubject(subject);
+        ticketPage.enterDescription(description);
+    }
+
+    @And("I submit the new ticket")
+    public void iSubmitTheNewTicket() {
+        ticketPage.clickSubmit();
+    }
+
+    @Then("The new ticket should be created successfully")
+    public void newTicketShouldBeCreatedSuccessfully() {
+        boolean isSubmitted = ticketPage.isTicketSubmitted();
+        System.out.println("Ticket submission validation: " + isSubmitted);
+    }
 }

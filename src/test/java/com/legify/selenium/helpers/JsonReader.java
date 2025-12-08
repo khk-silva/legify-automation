@@ -32,6 +32,11 @@ public class JsonReader {
     public static String getUserData(String userKey, String field) {
         return rootNode.get(userKey).get(field).asText();
     }
+
+    // Generic method for ANY field inside any user object
+    public static String getTicketData(String ticketKey, String field) {
+        return rootNode.get(ticketKey).get(field).asText();
+    }
 }
 
 
