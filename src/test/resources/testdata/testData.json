@@ -24,5 +24,16 @@
     "category": "Performance Issue",
     "subject": "Test subject",
     "description": "test Description"
+  },
+
+  "NewResource1": {
+
+    "title": "tESTuu1",
+    "type": "Regulatory Publication",
+    "applicableTypes": "Franchise Agreement",
+    "jurisdiction": "Algeria",
+    "tags": "test1243",
+    "attachment": "Remoly Employment Law.docx"
+
   }
 }

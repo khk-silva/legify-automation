@@ -33,9 +33,14 @@ public class JsonReader {
         return rootNode.get(userKey).get(field).asText();
     }
 
-    // Generic method for ANY field inside any user object
+    // Generic method for ANY field inside any ticket object
     public static String getTicketData(String ticketKey, String field) {
         return rootNode.get(ticketKey).get(field).asText();
+    }
+
+    // Generic method for ANY field inside any resource object
+    public static String getResourceData(String resourceKey, String field) {
+        return rootNode.get(resourceKey).get(field).asText();
     }
 }
 

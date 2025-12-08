@@ -9,6 +9,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class ResourceSteps {
 
     @Autowired
@@ -46,4 +48,46 @@ public class ResourceSteps {
     public void iShouldSeeTheCreateNewResourceWindow() {
         resourcePage.isResourceCreationWindowDisplayed();
     }
+
+    @When("I fill the Resource form with test data {string}")
+    public void iFillResourceFormWithTestData(String resourceKey) {
+        String title = JsonReader.getResourceData(resourceKey, "title");
+        String type = JsonReader.getResourceData(resourceKey, "type");
+        String applicableTypes = JsonReader.getResourceData(resourceKey, "applicableTypes");
+        String jurisdiction = JsonReader.getResourceData(resourceKey, "jurisdiction");
+        String tags = JsonReader.getResourceData(resourceKey, "tags");
+        String attachment = JsonReader.getResourceData(resourceKey, "attachment");
+
+        // Enter Title
+        resourcePage.enterTitle(title);
+
+        // Select Type
+        resourcePage.selectType(type);
+
+        // Select Applicable Document Types
+        resourcePage.selectApplicableDocumentType(applicableTypes);
+
+        // Select Jurisdiction
+        resourcePage.selectJurisdiction(jurisdiction);
+
+        // Enter Tags (press enter to create tag)
+        resourcePage.addTag(tags);
+
+        // Upload Document
+        resourcePage.uploadDocument(attachment);
+    }
+
+    @And("I submit the new resource")
+    public void iSubmitTheNewResource() {
+        resourcePage.clickCreateButton();
+    }
+
+    @Then("The new resource should be created successfully {string}")
+    public void newResourceShouldBeCreatedSuccessfully( String resourceKey) {
+        String title = JsonReader.getResourceData(resourceKey, "title");
+        boolean isCreated = resourcePage.isResourceCreatedSuccessfully(title);
+        System.out.println("Resource creation validation: " + isCreated);
+        assertTrue(isCreated, "Resource creation failed");
+    }
+
 }
