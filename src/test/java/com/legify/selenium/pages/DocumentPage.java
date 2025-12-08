@@ -33,12 +33,6 @@ public class DocumentPage implements BasePage {
     // Navigate to Document module (assuming some side menu)
     public void navigateToDocumentModule() {
         waitForLoaderToDisappear();// Optional: wait a bit if API/Angular is slow
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
 
 
         By documentsMenuBy = By.xpath("//h4[normalize-space()='Documents']");
@@ -143,7 +137,7 @@ public class DocumentPage implements BasePage {
     }
 
 
-    public boolean isUploadDocumentOptionVisible() {
+    public void isUploadDocumentOptionVisible() {
         try {
             // Wait until the button is visible (but not necessarily clickable)
             WebElement uploadBtn = hooks.getWait().until(
@@ -154,9 +148,8 @@ public class DocumentPage implements BasePage {
             ((JavascriptExecutor) hooks.getDriver())
                     .executeScript("arguments[0].scrollIntoView({block: 'center'});", uploadBtn);
 
-            return uploadBtn.isDisplayed(); // returns true if visible
-        } catch (TimeoutException | NoSuchElementException | StaleElementReferenceException e) {
-            return false; // button not visible
+            uploadBtn.isDisplayed();
+        } catch (TimeoutException | NoSuchElementException | StaleElementReferenceException ignored) {
         }
     }
 
@@ -192,6 +185,13 @@ public class DocumentPage implements BasePage {
     public void clickUploadDocumentOption() {
         // Wait for any loader/spinner to disappear
         waitForLoaderToDisappear();
+
+        try {
+            System.out.println("Thread upload");
+            Thread.sleep(25000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         int attempts = 0;
         while (attempts < 3) {

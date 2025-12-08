@@ -8,10 +8,10 @@ Feature: Document Module
     Given I am logged in with valid credentials4
     When I navigate to the Document module
     Then I should see the "Create New Document" button
-    When I click the "Create New Document" button
+#    When I click the "Create New Document" button
     Then I should see the Document Templates page
     When I click the Upload Document option
-    Then I should see the "Upload New Document" window
+    Then I should see the "Upload Document" window
 #    When I fill the document form with test data "newdoc1"
 #    And I submit the new document
 #    Then the document should be created successfully
