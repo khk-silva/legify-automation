@@ -4,8 +4,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import com.legify.selenium.runners.Hook;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,23 +15,47 @@ public class VisibilityHelper {
     @Autowired
     private Hook hooks;
 
-    /**
-     * Waits until the given element is visible.
-     * The element must be present on the DOM before the waiting starts
-     * 
-     * @param element Element to check
-     */
+    private final By loaderBy = By.cssSelector(".loading-overlay");
+
+
     public void waitForVisibilityOf(WebElement element) {
         hooks.getWait().until(visibilityOf(element));
     }
 
-    /**
-     * Waits for presence and visibility of the element matched by given selector.
-     * The element can be present in the DOM or not before the waiting starts
-     * 
-     * @param by Selector of the element
-     */
+
     public void waitForPresenceOf(By by) {
         hooks.getWait().until(visibilityOfElementLocated(by));
+    }
+
+    // ---------------- Utility methods ----------------
+    public void safeSleep(long ms) {
+        try { Thread.sleep(ms); } catch (InterruptedException ignored) {}
+    }
+
+    public void jsScrollToCenter(WebElement element) {
+        ((JavascriptExecutor) hooks.getDriver())
+                .executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+    }
+
+    public void jsClick(WebElement element) {
+        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].click();", element);
+    }
+
+    public void retryElementAction(Runnable action) {
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                action.run();
+                return;
+            } catch (StaleElementReferenceException | TimeoutException e) {
+                attempts++;
+                if (attempts == 3) throw e;
+                safeSleep(800);
+            }
+        }
+    }
+
+    public void waitForLoaderToDisappear() {
+        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
     }
 }
