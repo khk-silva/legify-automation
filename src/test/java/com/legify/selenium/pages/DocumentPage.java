@@ -50,6 +50,11 @@ public class DocumentPage implements BasePage {
     private final By uploadNewDocumentTitleBy =
             By.xpath("//div[contains(@class,'title-padding') and normalize-space()='Upload New Document']");
 
+    By processedTextBy = By.xpath("//p[contains(@class,'loading-text') and contains(text(),'successfully processed')]");
+    By letsGoBtnBy = By.xpath("//button[normalize-space()=\"Let's Go\"]");
+
+
+
 
     // Navigate to Document module (assuming some side menu)
     public void navigateToDocumentModule() {
@@ -405,6 +410,37 @@ public class DocumentPage implements BasePage {
             }
         }
     }
+
+    public void clickLetsGoButtonAfterProcessing() {
+
+
+        // 1️⃣ Wait until the success text appears
+        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(processedTextBy));
+
+        System.out.println("Document processed message appeared.");
+
+        // 2️⃣ Wait for “Let's Go” button to be visible + clickable
+        WebElement letsGoBtn = hooks.getWait().until(ExpectedConditions.elementToBeClickable(letsGoBtnBy));
+
+        // 3️⃣ Scroll & JS Click
+        ((JavascriptExecutor) hooks.getDriver())
+                .executeScript("arguments[0].scrollIntoView(true);", letsGoBtn);
+
+        ((JavascriptExecutor) hooks.getDriver())
+                .executeScript("arguments[0].click();", letsGoBtn);
+
+        System.out.println("Clicked Let's Go button.");
+
+        // 4️⃣ After clicking, wait 1 minute for document to fully load
+        try {
+            Thread.sleep(60000); // 60 seconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Document load wait completed.");
+    }
+
 
     // -------------------------------------
     // Wait for popup close

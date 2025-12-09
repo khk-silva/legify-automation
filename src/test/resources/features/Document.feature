@@ -14,6 +14,7 @@ Feature: Document Module
     Then I should see the "Upload Document" window
     When I fill the document form with test data "NewUploadDoc1"
     And I submit the new document
+    And I click the Let's go Button
 #    Then the document should be created successfully
 
 

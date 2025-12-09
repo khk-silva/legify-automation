@@ -91,6 +91,11 @@ public class DocumentSteps {
         documentPage.clickDocumentCreateButton();
     }
 
+    @And("I click the Let's go Button")
+    public void clickOnLetsGoButton() {
+        documentPage.clickLetsGoButtonAfterProcessing();
+    }
+
     @Then("the document should be created successfully")
     public void verifyDocumentCreation() {
         // Optional: Add verification if document exists in template list
