@@ -39,7 +39,7 @@ public class TicketSteps {
 
     @Then("I should see the Tickets page")
     public void verifyTicketsPage() {
-        assertTrue(ticketPage.showTicketsPage(), "Tickets page is not displayed");
+        assertTrue(ticketPage.verifyTicketsPageVisible(), "Tickets page is not displayed");
     }
 
     @When("I click the Open Ticket button")
