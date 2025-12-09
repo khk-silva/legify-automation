@@ -1,5 +1,243 @@
+//package com.legify.selenium.pages;
+//
+//import com.legify.selenium.runners.Hook;
+//import org.openqa.selenium.*;
+//import org.openqa.selenium.support.FindBy;
+//import org.openqa.selenium.support.PageFactory;
+//import org.openqa.selenium.support.ui.ExpectedConditions;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Component;
+//
+//import static org.junit.jupiter.api.Assertions.assertTrue;
+//
+//@Component
+//public class UserPage implements BasePage {
+//
+//    @Autowired
+//    private Hook hooks;
+//
+//    @Autowired
+//    public UserPage(Hook hooks) {
+//        this.hooks = hooks;
+//        PageFactory.initElements(hooks.getDriver(), this);
+//    }
+//
+//
+//    private final By userMenuIconBy = By.id("side_menu_list_item_ico_users");
+//    private final By usersPageHeaderBy = By.id("side_menu_list_item_users");
+//    private final By loaderBy = By.cssSelector(".loading-overlay");
+//    private final By createUserModalBy = By.cssSelector("div.user-form");
+//
+//    private final By salutationDropdownBy =
+//            By.xpath("//mat-select[@formcontrolname='salutation']//div[contains(@class,'mat-select-trigger')]");
+//
+//    private final By firstNameBy = By.id("firstName");
+//
+//    @FindBy(id = "lastName")
+//    private WebElement lastNameField;
+//
+//    @FindBy(id = "email")
+//    private WebElement emailField;
+//
+//    private final By countryDropdownBy =
+//            By.xpath("//mat-select[@formcontrolname='country']//div[contains(@class,'mat-select-trigger')]");
+//
+//    private final By roleRadioGroupBy = By.xpath("//mat-radio-group[@formcontrolname='role']");
+//
+//    private final By submitBtnBy = By.xpath("//button[normalize-space()='Submit']");
+//
+//
+//    @FindBy(xpath = "//button[normalize-space()='Create New User']")
+//    private WebElement createNewUserButton;
+//
+//
+//
+//    public void navigateToUsersPage() {
+//
+//        int attempts = 0;
+//        while (attempts < 3) {
+//            try {
+//                WebElement icon = hooks.getWait().until(ExpectedConditions.elementToBeClickable(userMenuIconBy));
+//                icon.click();
+//                break; // success
+//            } catch (StaleElementReferenceException e) {
+//                attempts++;
+//            }
+//        }
+//    }
+//
+//    public void showUserPage() {
+//
+//        boolean isDisplayed = false;
+//        int attempts = 0;
+//        while (attempts < 3) {
+//            try {
+//                WebElement usersPageHeader = hooks.getWait().until(
+//                        ExpectedConditions.visibilityOfElementLocated(usersPageHeaderBy)
+//                );
+//                isDisplayed = usersPageHeader.isDisplayed();
+//                break;
+//            } catch (StaleElementReferenceException e) {
+//                attempts++;
+//                if (attempts == 3) throw e;
+//            }
+//        }
+//        assertTrue(isDisplayed, "Users page is not visible");
+//
+//        hooks.getWait().until(ExpectedConditions.visibilityOf(createNewUserButton));
+//        hooks.getWait().until(ExpectedConditions.elementToBeClickable(createNewUserButton));
+//    }
+//
+//    public void clickCreateNewUserButton() {
+//        try {
+//            System.out.println("Thread uuuuuuuuuuuuuuuuuu");
+//            Thread.sleep(45000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        hooks.getWait().until(ExpectedConditions.elementToBeClickable(createNewUserButton));
+//        createNewUserButton.click();
+//    }
+//
+//    public void showCreateUserModal() {
+//
+//        boolean isDisplayed = false;
+//        int attempts = 0;
+//
+//        while (attempts < 3) {
+//            try {
+//                WebElement modal = hooks.getWait().until(
+//                        ExpectedConditions.visibilityOfElementLocated(createUserModalBy)
+//                );
+//                isDisplayed = modal.isDisplayed();
+//                break;
+//            } catch (StaleElementReferenceException e) {
+//                attempts++;
+//                if (attempts == 3) throw e;
+//            }
+//        }
+//        assertTrue(isDisplayed, "Create New User modal is not visible");
+//    }
+//
+//    public void waitForLoaderToDisappear() {
+//        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+//    }
+//
+//    public void selectSalutation(String value) {
+//
+//        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+//
+//        WebElement dropdown = hooks.getWait().until(
+//                ExpectedConditions.visibilityOfElementLocated(salutationDropdownBy));
+//
+//        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", dropdown);
+//        hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
+//        dropdown.click();
+//
+//        String salutationOptionXpath = "//mat-option//span[normalize-space()='%s']";
+//        By optionBy = By.xpath(String.format(salutationOptionXpath, value));
+//        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(optionBy));
+//
+//        WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
+//        option.click();
+//    }
+//
+//    public void enterFirstName(String firstName) {
+//
+//        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+//
+//        WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(firstNameBy));
+//
+//        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", input);
+//
+//        input.clear();
+//        input.sendKeys(firstName);
+//    }
+//
+//    public void enterLastName(String last) {
+//        waitForLoaderToDisappear();
+//        lastNameField.clear();
+//        lastNameField.sendKeys(last);
+//    }
+//
+//    public void enterEmail(String email) {
+//        emailField.clear();
+//        emailField.sendKeys(email);
+//    }
+//
+//    public void selectCountry(String countryName) {
+//
+//        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+//
+//        WebElement dropdown = hooks.getWait().until(
+//                ExpectedConditions.visibilityOfElementLocated(countryDropdownBy));
+//
+//        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", dropdown);
+//        hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
+//        dropdown.click();
+//
+//        String countryOptionXpath = "//mat-option//span[normalize-space()='%s']";
+//        By optionBy = By.xpath(String.format(countryOptionXpath, countryName));
+//        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(optionBy));
+//
+//        WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
+//        option.click();
+//    }
+//
+//    public void selectRole(String roleName) {
+//
+//        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(roleRadioGroupBy));
+//
+//        String roleOptionXpath = "//mat-radio-button//span[contains(@class,'mat-radio-label-content') and normalize-space()='%s']";
+//        By radioOptionBy = By.xpath(String.format(roleOptionXpath, roleName));
+//        WebElement radioOption = hooks.getWait().until(ExpectedConditions.elementToBeClickable(radioOptionBy));
+//
+//        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", radioOption);
+//        radioOption.click();
+//    }
+//
+//    public void clickSubmitButton() {
+//
+//        WebElement submitBtn = hooks.getWait()
+//                .until(ExpectedConditions.visibilityOfElementLocated(submitBtnBy));
+//
+//        hooks.getWait().until(driver -> submitBtn.isEnabled());
+//
+//        ((JavascriptExecutor) hooks.getDriver())
+//                .executeScript("arguments[0].scrollIntoView(true);", submitBtn);
+//
+//        hooks.getWait().until(ExpectedConditions.elementToBeClickable(submitBtn)).click();
+//
+//        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(
+//                By.cssSelector(".loading-overlay, .spinner, .mat-progress-spinner")));
+//    }
+//
+//
+//    public void isUserCreatedSuccessfully(String email) {
+//        try {
+//            // Wait until the Users table is visible (page loaded)
+//            hooks.getWait().until(
+//                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//th[text()='User ID']"))
+//            );
+//
+//            // Verify the newly created user's email exists in the table
+//            By emailCell = By.xpath("//tbody//td/div[text()='" + email + "']");
+//            hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(emailCell));
+//
+//        } catch (TimeoutException ignored) {
+//        }
+//    }
+//
+//
+//}
+//
+
+
+
 package com.legify.selenium.pages;
 
+import com.legify.selenium.helpers.VisibilityHelper;
 import com.legify.selenium.runners.Hook;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -17,15 +255,19 @@ public class UserPage implements BasePage {
     private Hook hooks;
 
     @Autowired
+    private VisibilityHelper visibilityHelper;
+
+    @Autowired
     public UserPage(Hook hooks) {
         this.hooks = hooks;
         PageFactory.initElements(hooks.getDriver(), this);
     }
 
-
+    // ---------------- Locators ----------------
     private final By userMenuIconBy = By.id("side_menu_list_item_ico_users");
     private final By usersPageHeaderBy = By.id("side_menu_list_item_users");
     private final By loaderBy = By.cssSelector(".loading-overlay");
+
     private final By createUserModalBy = By.cssSelector("div.user-form");
 
     private final By salutationDropdownBy =
@@ -46,189 +288,170 @@ public class UserPage implements BasePage {
 
     private final By submitBtnBy = By.xpath("//button[normalize-space()='Submit']");
 
-
     @FindBy(xpath = "//button[normalize-space()='Create New User']")
     private WebElement createNewUserButton;
 
 
-
+    // ---------------- Navigate Users Page ----------------
     public void navigateToUsersPage() {
-
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                WebElement icon = hooks.getWait().until(ExpectedConditions.elementToBeClickable(userMenuIconBy));
-                icon.click();
-                break; // success
-            } catch (StaleElementReferenceException e) {
-                attempts++;
-            }
-        }
+        visibilityHelper.retryElementAction(() -> {
+            WebElement icon = hooks.getWait().until(ExpectedConditions.elementToBeClickable(userMenuIconBy));
+            visibilityHelper.jsScrollToCenter(icon);
+            visibilityHelper.jsClick(icon);
+        });
     }
 
     public void showUserPage() {
-
-        boolean isDisplayed = false;
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                WebElement usersPageHeader = hooks.getWait().until(
-                        ExpectedConditions.visibilityOfElementLocated(usersPageHeaderBy)
-                );
-                isDisplayed = usersPageHeader.isDisplayed();
-                break;
-            } catch (StaleElementReferenceException e) {
-                attempts++;
-                if (attempts == 3) throw e;
-            }
-        }
-        assertTrue(isDisplayed, "Users page is not visible");
+        visibilityHelper.retryElementAction(() -> {
+            WebElement header = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(usersPageHeaderBy)
+            );
+            assertTrue(header.isDisplayed(), "Users page is not visible");
+        });
 
         hooks.getWait().until(ExpectedConditions.visibilityOf(createNewUserButton));
         hooks.getWait().until(ExpectedConditions.elementToBeClickable(createNewUserButton));
     }
 
+    // ---------------- Create User ----------------
     public void clickCreateNewUserButton() {
-        try {
-            System.out.println("Thread uuuuuuuuuuuuuuuuuu");
-            Thread.sleep(45000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        visibilityHelper.safeSleep(45000); // keeping your original logic
 
-        hooks.getWait().until(ExpectedConditions.elementToBeClickable(createNewUserButton));
-        createNewUserButton.click();
+        visibilityHelper.retryElementAction(() -> {
+            visibilityHelper.jsScrollToCenter(createNewUserButton);
+            hooks.getWait().until(ExpectedConditions.elementToBeClickable(createNewUserButton));
+            visibilityHelper.jsClick(createNewUserButton);
+        });
     }
 
     public void showCreateUserModal() {
-
-        boolean isDisplayed = false;
-        int attempts = 0;
-
-        while (attempts < 3) {
-            try {
-                WebElement modal = hooks.getWait().until(
-                        ExpectedConditions.visibilityOfElementLocated(createUserModalBy)
-                );
-                isDisplayed = modal.isDisplayed();
-                break;
-            } catch (StaleElementReferenceException e) {
-                attempts++;
-                if (attempts == 3) throw e;
-            }
-        }
-        assertTrue(isDisplayed, "Create New User modal is not visible");
+        visibilityHelper.retryElementAction(() -> {
+            WebElement modal = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(createUserModalBy)
+            );
+            assertTrue(modal.isDisplayed(), "Create New User modal is not visible");
+        });
     }
 
     public void waitForLoaderToDisappear() {
-        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+        visibilityHelper.waitForLoaderToDisappear();
     }
 
+    // ---------------- Salutation ----------------
     public void selectSalutation(String value) {
+        visibilityHelper.waitForLoaderToDisappear();
 
-        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+        visibilityHelper.retryElementAction(() -> {
+            WebElement dropdown = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(salutationDropdownBy)
+            );
 
-        WebElement dropdown = hooks.getWait().until(
-                ExpectedConditions.visibilityOfElementLocated(salutationDropdownBy));
+            visibilityHelper.jsScrollToCenter(dropdown);
+            hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
+            dropdown.click();
 
-        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", dropdown);
-        hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
-        dropdown.click();
-
-        String salutationOptionXpath = "//mat-option//span[normalize-space()='%s']";
-        By optionBy = By.xpath(String.format(salutationOptionXpath, value));
-        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(optionBy));
-
-        WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
-        option.click();
+            By optionBy = By.xpath("//mat-option//span[normalize-space()='" + value + "']");
+            WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
+            option.click();
+        });
     }
 
+    // ---------------- Name fields ----------------
     public void enterFirstName(String firstName) {
+        visibilityHelper.waitForLoaderToDisappear();
 
-        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
-
-        WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(firstNameBy));
-
-        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", input);
-
-        input.clear();
-        input.sendKeys(firstName);
+        visibilityHelper.retryElementAction(() -> {
+            WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(firstNameBy));
+            visibilityHelper.jsScrollToCenter(input);
+            input.clear();
+            input.sendKeys(firstName);
+        });
     }
 
     public void enterLastName(String last) {
-        waitForLoaderToDisappear();
+        visibilityHelper.waitForLoaderToDisappear();
         lastNameField.clear();
         lastNameField.sendKeys(last);
     }
 
     public void enterEmail(String email) {
+        visibilityHelper.waitForLoaderToDisappear();
         emailField.clear();
         emailField.sendKeys(email);
     }
 
+    // ---------------- Country ----------------
     public void selectCountry(String countryName) {
+        visibilityHelper.waitForLoaderToDisappear();
 
-        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
+        visibilityHelper.retryElementAction(() -> {
+            WebElement dropdown = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(countryDropdownBy)
+            );
 
-        WebElement dropdown = hooks.getWait().until(
-                ExpectedConditions.visibilityOfElementLocated(countryDropdownBy));
+            visibilityHelper.jsScrollToCenter(dropdown);
+            hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
+            dropdown.click();
 
-        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", dropdown);
-        hooks.getWait().until(ExpectedConditions.elementToBeClickable(dropdown));
-        dropdown.click();
-
-        String countryOptionXpath = "//mat-option//span[normalize-space()='%s']";
-        By optionBy = By.xpath(String.format(countryOptionXpath, countryName));
-        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(optionBy));
-
-        WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
-        option.click();
+            By optionBy = By.xpath("//mat-option//span[normalize-space()='" + countryName + "']");
+            WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
+            option.click();
+        });
     }
 
+    // ---------------- Role ----------------
     public void selectRole(String roleName) {
+        visibilityHelper.retryElementAction(() -> {
+            hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(roleRadioGroupBy));
 
-        hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(roleRadioGroupBy));
+            By radioOptionBy = By.xpath("//mat-radio-button//span[contains(@class,'mat-radio-label-content') and normalize-space()='" + roleName + "']");
+            WebElement radioOption = hooks.getWait().until(ExpectedConditions.elementToBeClickable(radioOptionBy));
 
-        String roleOptionXpath = "//mat-radio-button//span[contains(@class,'mat-radio-label-content') and normalize-space()='%s']";
-        By radioOptionBy = By.xpath(String.format(roleOptionXpath, roleName));
-        WebElement radioOption = hooks.getWait().until(ExpectedConditions.elementToBeClickable(radioOptionBy));
-
-        ((JavascriptExecutor) hooks.getDriver()).executeScript("arguments[0].scrollIntoView(true);", radioOption);
-        radioOption.click();
+            visibilityHelper.jsScrollToCenter(radioOption);
+            visibilityHelper.jsClick(radioOption);
+        });
     }
 
     public void clickSubmitButton() {
 
-        WebElement submitBtn = hooks.getWait()
-                .until(ExpectedConditions.visibilityOfElementLocated(submitBtnBy));
+        visibilityHelper.retryElementAction(() -> {
+            WebElement submitBtn = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(submitBtnBy)
+            );
 
-        hooks.getWait().until(driver -> submitBtn.isEnabled());
+            // Wait until enabled
+            hooks.getWait().until(driver -> submitBtn.isEnabled());
 
-        ((JavascriptExecutor) hooks.getDriver())
-                .executeScript("arguments[0].scrollIntoView(true);", submitBtn);
+            // Scroll
+            visibilityHelper.jsScrollToCenter(submitBtn);
 
-        hooks.getWait().until(ExpectedConditions.elementToBeClickable(submitBtn)).click();
+            // Click
+            visibilityHelper.jsClick(submitBtn);
+        });
 
-        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(
-                By.cssSelector(".loading-overlay, .spinner, .mat-progress-spinner")));
+        // Wait for loader to disappear
+        visibilityHelper.waitForLoaderToDisappear();
     }
 
 
     public void isUserCreatedSuccessfully(String email) {
-        try {
-            // Wait until the Users table is visible (page loaded)
+
+        visibilityHelper.retryElementAction(() -> {
+
+            // Wait until users table loads
             hooks.getWait().until(
-                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//th[text()='User ID']"))
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//th[text()='User ID']")
+                    )
             );
 
-            // Verify the newly created user's email exists in the table
+            // Check email exists in table
             By emailCell = By.xpath("//tbody//td/div[text()='" + email + "']");
-            hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(emailCell));
 
-        } catch (TimeoutException ignored) {
-        }
+            hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(emailCell)
+            );
+        });
     }
 
-
 }
-
