@@ -29,11 +29,21 @@
   "NewResource1": {
 
     "title": "tESTuu1",
-    "type": "Regulatory Publication",
+    "type": "Statute",
     "applicableTypes": "Franchise Agreement",
-    "jurisdiction": "Algeria",
+    "jurisdiction": "Comoros",
     "tags": "test1243",
     "attachment": "Remoly Employment Law.docx"
+
+  },
+
+  "NewUploadDoc1": {
+
+    "title": "tESTu3t3u1",
+    "jurisdiction": "Algeria",
+    "type": "Franchise Agreement",
+    "recipient": "sss@gmail.com",
+    "fileName": "Remoly Employment Law.docx"
 
   }
 }

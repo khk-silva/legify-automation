@@ -42,6 +42,11 @@ public class JsonReader {
     public static String getResourceData(String resourceKey, String field) {
         return rootNode.get(resourceKey).get(field).asText();
     }
+
+    // Generic method for ANY field inside any resource object
+    public static String getDocumentData(String documentKey, String field) {
+        return rootNode.get(documentKey).get(field).asText();
+    }
 }
 
 

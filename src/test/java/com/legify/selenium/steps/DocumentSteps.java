@@ -4,6 +4,7 @@ import com.legify.selenium.helpers.JsonReader;
 import com.legify.selenium.pages.DocumentPage;
 import com.legify.selenium.pages.LoginPage;
 import com.legify.selenium.runners.Hook;
+import com.legify.selenium.helpers.JsonReader;
 
 import io.cucumber.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,31 +64,38 @@ public class DocumentSteps {
     @Then("I should see the {string} window")
     public void verifyUploadNewDocumentWindow(String windowName) {
         if (windowName.equalsIgnoreCase("Upload Document")) {
-            documentPage.verifyUploadNewDocumentWindowIsVisible();
+            documentPage.isUploadNewDocumentWindowDisplayed();
         }
     }
 
 
 
-//    @When("I fill the document form with test data {string}")
-//    public void fillDocumentFormWithJsonData(String documentKey) {
-//        // Read JSON data for this documentKey
-//        String title = jsonReader.getValue(documentDataFile, documentKey, "title");
-//        String jurisdiction = jsonReader.getValue(documentDataFile, documentKey, "jurisdiction");
-//        String type = jsonReader.getValue(documentDataFile, documentKey, "type");
-//
-//        documentPage.fillDocumentForm(title, jurisdiction, type);
-//    }
+    @When("I fill the document form with test data {string}")
+    public void fillDocumentFormWithJsonData(String documentKey) {
 
-    @And("I submit the new doc")
+        String title = JsonReader.getDocumentData(documentKey, "title");
+        String jurisdiction = JsonReader.getDocumentData( documentKey, "jurisdiction");
+        String type = JsonReader.getDocumentData( documentKey, "type");
+        String recipient = JsonReader.getDocumentData( documentKey, "recipient");
+        String fileName = JsonReader.getDocumentData( documentKey, "fileName");
+
+       documentPage.enterDocumentTitle(title);
+       documentPage.selectDocumentJurisdiction(jurisdiction);
+       documentPage.selectDocumentType(type);
+       documentPage.uploadDocumentFile(fileName);
+    }
+
+
+    @And("I submit the new document")
     public void submitNewDocument() {
-        documentPage.submitNewDocument();
+        documentPage.clickDocumentCreateButton();
     }
 
     @Then("the document should be created successfully")
     public void verifyDocumentCreation() {
         // Optional: Add verification if document exists in template list
         System.out.println("Document creation verified");
+        documentPage.waitForDocumentPopupToClose();
     }
 }
 

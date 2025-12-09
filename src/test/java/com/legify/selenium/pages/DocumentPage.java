@@ -1,6 +1,7 @@
 package com.legify.selenium.pages;
 
 import com.legify.selenium.runners.Hook;
+import io.cucumber.plugin.event.Node;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,31 @@ public class DocumentPage implements BasePage {
     // Locators
     private final By createNewDocBtnBy = By.xpath("//button[.//text()='Create New Document']");
     private final By documentTemplatesPageBy = By.cssSelector(".template-view-container");
-    private final By uploadDocumentBtnBy = By.cssSelector("button.plus-icon-button");
+    //private final By uploadDocumentBtnBy = By.cssSelector("button.plus-icon-button");
+    By uploadDocumentBtnBy = By.xpath("//button[contains(@class,'plus-icon-button')]//i[contains(@class,'bi-upload')]");
+
     private final By uploadNewDocWindowBy = By.cssSelector("legify-ai-upload-document-template-popup");
     By uploadDocumentBtnBy1 = By.cssSelector("button.plus-icon-button[aria-label='Upload new']");
 
     private final By loaderBy = By.cssSelector(".loading-overlay");
+
+    // Locators – Popup
+    // -------------------------------------
+    private final By popupContainerBy = By.xpath("//mat-dialog-container");
+
+    private final By docTitleInputBy = By.xpath("//input[@formcontrolname='title']");
+    private final By docJurisdictionDropdownBy = By.xpath("//mat-select[@formcontrolname='jurisdiction']");
+    private final By docTypeDropdownBy = By.xpath("//mat-select[@formcontrolname='type']");
+    private final By docRecipientInputBy = By.xpath("//input[@placeholder='Start by typing email']");
+    private final By docFileUploadInputBy = By.xpath("//input[@type='file']");
+
+    private final By docCreateBtnBy = By.xpath("//button[contains(@class,'create-button')]");
+    //private final By docCreateEnabledBtnBy = By.xpath("//button[contains(@class,'create-button') and not(@disabled)]");
+    By docCreateEnabledBtnBy = By.xpath("//button[contains(@class,'la-btn__filled') and normalize-space()='Create']");
+
+    private final By uploadNewDocumentTitleBy =
+            By.xpath("//div[contains(@class,'title-padding') and normalize-space()='Upload New Document']");
+
 
     // Navigate to Document module (assuming some side menu)
     public void navigateToDocumentModule() {
@@ -73,6 +94,13 @@ public class DocumentPage implements BasePage {
 
     public void verifyAndClickCreateNewDocumentButton() {
         // Locator for the "Create New Document" button
+
+        try {
+            Thread.sleep(35000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         By createNewDocBtnBy = By.xpath("//button[.//span[contains(text(),'Create New Document')]]");
 
         // Wait for loader/spinner to disappear if any
@@ -264,5 +292,124 @@ public class DocumentPage implements BasePage {
         By optionBy = By.xpath(String.format("//mat-option//span[normalize-space()='%s']", optionText));
         WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
         option.click();
+    }
+
+    public void isUploadNewDocumentWindowDisplayed() {
+
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        int attempts = 0;
+
+        while (attempts < 3) {
+            try {
+                WebElement title = hooks.getWait()
+                        .until(ExpectedConditions.visibilityOfElementLocated(uploadNewDocumentTitleBy));
+
+                assertTrue(title.isDisplayed(),
+                        "Upload New Document popup title is not visible");
+
+                return; // success
+            } catch (StaleElementReferenceException | TimeoutException e) {
+                attempts++;
+                if (attempts == 3) throw e;
+            }
+        }
+    }
+
+
+    // -------------------------------------
+    // Popup Field Methods
+    // -------------------------------------
+
+    public void enterDocumentTitle(String title) {
+        waitForLoaderToDisappear();
+        WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(docTitleInputBy));
+        input.clear();
+        input.sendKeys(title);
+    }
+
+    public void selectDocumentJurisdiction(String jurisdiction) {
+        waitForLoaderToDisappear();
+        WebElement dropdown = hooks.getWait().until(ExpectedConditions.elementToBeClickable(docJurisdictionDropdownBy));
+        dropdown.click();
+
+        By optionBy = By.xpath(String.format("//mat-option//span[normalize-space()='%s']", jurisdiction));
+        WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
+        option.click();
+    }
+
+    public void selectDocumentType(String type) {
+        waitForLoaderToDisappear();
+        WebElement dropdown = hooks.getWait().until(ExpectedConditions.elementToBeClickable(docTypeDropdownBy));
+        dropdown.click();
+
+        By optionBy = By.xpath(String.format("//mat-option//span[normalize-space()='%s']", type));
+        WebElement option = hooks.getWait().until(ExpectedConditions.elementToBeClickable(optionBy));
+        option.click();
+    }
+
+    public void addRecipient(String email) {
+        waitForLoaderToDisappear();
+        WebElement input = hooks.getWait().until(ExpectedConditions.elementToBeClickable(docRecipientInputBy));
+        input.sendKeys(email);
+        input.sendKeys(Keys.ENTER);
+    }
+
+    public void uploadDocumentFile(String fileRelativePath) {
+        waitForLoaderToDisappear();
+
+        String fullPath = System.getProperty("user.dir")
+                + "/src/test/resources/testFiles/"
+                + fileRelativePath;
+
+        WebElement uploadInput = hooks.getWait()
+                .until(ExpectedConditions.presenceOfElementLocated(docFileUploadInputBy));
+
+        uploadInput.sendKeys(fullPath);
+
+        try { Thread.sleep(2000); } catch (Exception ignored) {}
+    }
+
+    // -------------------------------------
+    // Create Button
+    // -------------------------------------
+
+    public void clickDocumentCreateButton() {
+
+        By createBtn = By.xpath("//button[normalize-space()='Create']");
+
+        int attempts = 0;
+
+        while (attempts < 3) {
+            try {
+                waitForLoaderToDisappear();
+
+                WebElement btn = hooks.getWait()
+                        .until(ExpectedConditions.elementToBeClickable(createBtn));
+
+                ((JavascriptExecutor) hooks.getDriver())
+                        .executeScript("arguments[0].scrollIntoView(true);", btn);
+
+                ((JavascriptExecutor) hooks.getDriver())
+                        .executeScript("arguments[0].click();", btn);
+
+                waitForLoaderToDisappear();
+                return;
+
+            } catch (StaleElementReferenceException | TimeoutException e) {
+                attempts++;
+                if (attempts == 3) throw e;
+            }
+        }
+    }
+
+    // -------------------------------------
+    // Wait for popup close
+    // -------------------------------------
+    public void waitForDocumentPopupToClose() {
+        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(popupContainerBy));
     }
 }

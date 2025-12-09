@@ -12,8 +12,8 @@ Feature: Document Module
     Then I should see the Document Templates page
     When I click the Upload Document option
     Then I should see the "Upload Document" window
-#    When I fill the document form with test data "newdoc1"
-#    And I submit the new document
+    When I fill the document form with test data "NewUploadDoc1"
+    And I submit the new document
 #    Then the document should be created successfully
 
 
