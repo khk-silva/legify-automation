@@ -48,7 +48,7 @@ public class BaseSteps {
     @After(order = 1)
     public void closeDriver(final Scenario scenario) {
         hooks.tearDown(scenario);
-        hooks.closeDriver();
+        //hooks.closeDriver();
     }
 
     @After(order = Integer.MAX_VALUE)

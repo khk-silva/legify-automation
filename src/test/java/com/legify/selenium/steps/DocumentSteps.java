@@ -96,11 +96,45 @@ public class DocumentSteps {
         documentPage.clickLetsGoButtonAfterProcessing();
     }
 
-    @Then("the document should be created successfully")
+//    @Then("the document should be created successfully")
+//    public void verifyDocumentCreation() {
+//        // Optional: Add verification if document exists in template list
+//        System.out.println("Document creation verified");
+//        documentPage.waitForDocumentPopupToClose();
+//    }
+
+    // --------------------- SHARE DOCUMENT SCENARIO ---------------------
+
+
+    @Given("I have a document NewUploadDoc1 created")
     public void verifyDocumentCreation() {
-        // Optional: Add verification if document exists in template list
-        System.out.println("Document creation verified");
         documentPage.waitForDocumentPopupToClose();
+    }
+
+    @When("I click the Collaborate button")
+    public void clickCollaborateButton() {
+        documentPage.clickCollaborateButton();
+    }
+
+    @Then("the Collaborate popup should be displayed")
+    public void verifyCollaboratePopup() {
+        documentPage.verifyCollaboratePopupDisplayed();
+    }
+
+    @When("I add collaborator {string}")
+    public void addCollaborator(String collaboratorKey) {
+        String collaboratorEmail = JsonReader.getcollaboratorData( collaboratorKey, "collaboratorEmail");
+        documentPage.addCollaboratorEmail(collaboratorEmail);
+    }
+
+    @And("I click the Invite button")
+    public void clickInviteButton() {
+        documentPage.clickInviteButton();
+    }
+
+    @Then("the collaborator added snackbar message should be displayed")
+    public void verifyCollaboratorAddedSnackbar() {
+        documentPage.verifySnackbarMessageDisplayed();
     }
 }
 

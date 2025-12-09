@@ -1,3 +1,4 @@
+@DocumentModule
 Feature: Document Module
   As a user
   I want to create, share and sign documents
@@ -18,11 +19,16 @@ Feature: Document Module
 #    Then the document should be created successfully
 
 
-#  @ShareDocument
-#  Scenario: Share a document with a collaborator
-#    Given a document is already created
-#    When I share the document with collaborator "john@example.com"
-#    Then the collaborator should receive access to the document
+  @ShareDocument
+  Scenario: Share a document with a collaborator
+    Given I have a document NewUploadDoc1 created
+    When I click the Collaborate button
+    Then the Collaborate popup should be displayed
+    When I add collaborator "colloboratorKey"
+    And I click the Invite button
+#    Then the collaborator added snackbar message should be displayed
+
+
 #
 #  @AddSignatureAndShare
 #  Scenario: Add signature card and share document to recipient

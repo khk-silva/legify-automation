@@ -43,7 +43,16 @@ public class DocumentPage implements BasePage {
     private final By processedTextBy = By.xpath("//p[contains(@class,'loading-text') and contains(text(),'successfully processed')]");
     private final By letsGoBtnBy = By.xpath("//button[normalize-space()=\"Let's Go\"]");
 
-    
+    // ---------------- Share Document Locators ----------------
+
+    private final By documentCardBy = By.xpath("//div[contains(@class,'doc-card')]");  // dummy
+    private final By collaborateBtnBy = By.xpath("//button[.//span[contains(text(),'Collaborate')]]");
+    private final By collaboratePopupBy = By.cssSelector("mat-dialog-container invite-collaborators-popup");
+    private final By collaboratorEmailInputBy = By.xpath("//input[@placeholder='Search for Collaborators']");
+    private final By inviteBtnBy = By.xpath("//mat-dialog-container//button[normalize-space()='Invite']");
+    private final By snackbarMessageBy = By.xpath("//simple-snack-bar//span"); // dummy
+
+
 
 //    public void visibilityHelper.waitForLoaderToDisappear() {
 //        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
@@ -82,7 +91,7 @@ public class DocumentPage implements BasePage {
     }
 
     public void clickCreateNewDocumentButton() {
-        visibilityHelper.safeSleep(45000);
+        visibilityHelper.safeSleep(35000);
         visibilityHelper.waitForLoaderToDisappear();
 
         By buttonBy = By.xpath("//span[i[contains(@class,'bi-plus')] and contains(., 'Create New Document')]");
@@ -106,7 +115,7 @@ public class DocumentPage implements BasePage {
 
     public void clickUploadDocumentOption() {
         visibilityHelper.waitForLoaderToDisappear();
-        visibilityHelper.safeSleep(25000);
+        visibilityHelper.safeSleep(15000);
 
         visibilityHelper.retryElementAction(() -> {
             WebElement uploadBtn = hooks.getWait().until(
@@ -120,7 +129,7 @@ public class DocumentPage implements BasePage {
 
 
     public void isUploadNewDocumentWindowDisplayed() {
-        visibilityHelper.safeSleep(15000);
+        visibilityHelper.safeSleep(5000);
 
         visibilityHelper.retryElementAction(() -> {
             WebElement title = hooks.getWait().until(
@@ -197,12 +206,80 @@ public class DocumentPage implements BasePage {
         visibilityHelper.jsScrollToCenter(letsGoBtn);
         visibilityHelper.jsClick(letsGoBtn);
 
-        visibilityHelper.safeSleep(60000);
+        visibilityHelper.safeSleep(35000);
     }
 
     // ---------------- Popup Close ----------------
     public void waitForDocumentPopupToClose() {
         hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(popupContainerBy));
     }
+
+
+    public void verifyDocumentIsDisplayed() {
+        visibilityHelper.retryElementAction(() -> {
+            WebElement doc = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(documentCardBy)
+            );
+            assertTrue(doc.isDisplayed(), "Document card is not visible");
+        });
+    }
+    public void clickCollaborateButton() {
+        visibilityHelper.safeSleep(15000);
+        visibilityHelper.waitForLoaderToDisappear();
+
+        visibilityHelper.retryElementAction(() -> {
+            WebElement collabBtn = hooks.getWait().until(
+                    ExpectedConditions.elementToBeClickable(collaborateBtnBy)
+            );
+            visibilityHelper.jsScrollToCenter(collabBtn);
+            visibilityHelper.jsClick(collabBtn);
+        });
+    }
+
+    public void verifyCollaboratePopupDisplayed() {
+        visibilityHelper.safeSleep(5000);
+        visibilityHelper.retryElementAction(() -> {
+            WebElement popup = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(collaboratePopupBy)
+            );
+            assertTrue(popup.isDisplayed(), "Collaborate popup is not visible");
+        });
+    }
+
+    public void addCollaboratorEmail(String email) {
+        visibilityHelper.safeSleep(5000);
+        visibilityHelper.waitForLoaderToDisappear();
+
+        visibilityHelper.retryElementAction(() -> {
+            WebElement input = hooks.getWait().until(
+                    ExpectedConditions.elementToBeClickable(collaboratorEmailInputBy)
+            );
+            input.sendKeys(email);
+            input.sendKeys(Keys.ENTER);
+        });
+    }
+
+    public void clickInviteButton() {
+        visibilityHelper.safeSleep(15000);
+        visibilityHelper.waitForLoaderToDisappear();
+
+        visibilityHelper.retryElementAction(() -> {
+            WebElement btn = hooks.getWait().until(
+                    ExpectedConditions.elementToBeClickable(inviteBtnBy)
+            );
+            visibilityHelper.jsScrollToCenter(btn);
+            visibilityHelper.jsClick(btn);
+        });
+    }
+
+    public void verifySnackbarMessageDisplayed() {
+        visibilityHelper.retryElementAction(() -> {
+            WebElement snack = hooks.getWait().until(
+                    ExpectedConditions.visibilityOfElementLocated(snackbarMessageBy)
+            );
+            assertTrue(snack.isDisplayed(), "Snackbar message is not visible");
+        });
+    }
+
 }
 
