@@ -19,7 +19,7 @@ public class UserSteps {
     private Hook hooks;
 
     @Given("I am logged in with valid credentials")
-    public void iAmLoggedInWithValidCredentials() {
+    public void loginWithValidCredentials() {
         String username = JsonReader.getUsername("validUser");
         String password = JsonReader.getPassword("validUser");
 
@@ -29,28 +29,28 @@ public class UserSteps {
 
 
     @When("I click the Users menu icon")
-    public void iClickTheUsersMenuIcon() {
+    public void clickUsersMenuIcon() {
         userPage.navigateToUsersPage();
     }
 
     @Then("I should see the Users page")
-    public void iShouldSeeTheUsersPage() {
+    public void verifyUsersPageIsVisible() {
         userPage.showUserPage();
     }
 
     @When("I click the Create New User button")
-    public void iClickTheCreateNewUserButton() {
+    public void clickCreateNewUserButton() {
         userPage.clickCreateNewUserButton();
 
     }
 
     @Then("I should see the Create New User window")
-    public void iShouldSeeTheCreateNewUserwindow() {
+    public void verifyCreateUserWindowIsVisible() {
         userPage.showCreateUserModal();
     }
 
     @When("I fill the Create User form with test data {string}")
-    public void iFillCreateUserFormWithTestData(String userKey) {
+    public void fillCreateUserFormWithData(String userKey) {
 
         String salutation = JsonReader.getUserData(userKey, "salutation");
         String firstName = JsonReader.getUserData(userKey, "firstName");
@@ -67,13 +67,13 @@ public class UserSteps {
         //userPage.selectRole(role);
     }
 
-    @When("I save the new user")
-    public void iSaveTheNewUser() {
+    @When("I submit the new user")
+    public void submitNewUser() {
         userPage.clickSubmitButton();
     }
 
     @Then("The new user should be created successfully {string}")
-    public void newUserShouldBeCreatedSuccessfully(String userKey) {
+    public void verifyUserCreatedSuccessfully(String userKey) {
         String email = JsonReader.getUserData(userKey, "email");
         userPage.isUserCreatedSuccessfully(email);
         System.out.println("User creation validation placeholder");

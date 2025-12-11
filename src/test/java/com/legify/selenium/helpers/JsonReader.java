@@ -49,8 +49,13 @@ public class JsonReader {
     }
 
     // Generic method for ANY field inside any resource object
-    public static String getcollaboratorData(String collaboratorKey, String field) {
+    public static String getCollaboratorData(String collaboratorKey, String field) {
         return rootNode.get(collaboratorKey).get(field).asText();
+    }
+
+    // Generic method for ANY field inside any resource object
+    public static String getRecipientData(String recipientKey, String field) {
+        return rootNode.get(recipientKey).get(field).asText();
     }
 }
 

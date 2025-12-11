@@ -19,7 +19,7 @@ public class TicketSteps {
     private LoginPage loginPage;
 
     @Given("I am logged in with valid credentials2")
-    public void iAmLoggedInWithValidCredentials2() {
+    public void loginWithValidCredentials() {
         String username = JsonReader.getUsername("validUser");
         String password = JsonReader.getPassword("validUser");
 
@@ -53,7 +53,7 @@ public class TicketSteps {
     }
 
     @When("I fill the Ticket form with test data {string}")
-    public void iFillTicketFormWithTestData(String ticketKey) {
+    public void fillTicketFormWithTestData(String ticketKey) {
 
         String priority = JsonReader.getTicketData(ticketKey, "priority");
         String category = JsonReader.getTicketData(ticketKey, "category");
@@ -69,12 +69,12 @@ public class TicketSteps {
     }
 
     @And("I submit the new ticket")
-    public void iSubmitTheNewTicket() {
+    public void submitNewTicket() {
         ticketPage.clickSubmit();
     }
 
     @Then("The new ticket should be created successfully")
-    public void newTicketShouldBeCreatedSuccessfully() {
+    public void verifyTicketCreatedSuccessfully() {
         boolean isSubmitted = ticketPage.isTicketSubmitted();
         System.out.println("Ticket submission validation: " + isSubmitted);
     }

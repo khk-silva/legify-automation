@@ -86,7 +86,7 @@ public class DocumentSteps {
     }
 
 
-    @And("I submit the new document")
+    @And("I create the new document")
     public void submitNewDocument() {
         documentPage.clickDocumentCreateButton();
     }
@@ -123,7 +123,7 @@ public class DocumentSteps {
 
     @When("I add collaborator {string}")
     public void addCollaborator(String collaboratorKey) {
-        String collaboratorEmail = JsonReader.getcollaboratorData( collaboratorKey, "collaboratorEmail");
+        String collaboratorEmail = JsonReader.getCollaboratorData( collaboratorKey, "collaboratorEmail");
         documentPage.addCollaboratorEmail(collaboratorEmail);
     }
 
@@ -135,6 +135,42 @@ public class DocumentSteps {
     @Then("the collaborator added snackbar message should be displayed")
     public void verifyCollaboratorAddedSnackbar() {
         documentPage.verifySnackbarMessageDisplayed();
+    }
+
+    /////////////////////////
+
+    @When("I drag and drop the Signature element into the document editor")
+    public void dragAndDropSignature() {
+        documentPage.dragAndDropSignatureIntoEditor();
+    }
+
+    @And("I click on the Signature element")
+    public void clickSignatureElement() {
+        documentPage.clickSignatureElement();
+    }
+
+    @Then("the Signature card popup should be displayed")
+    public void verifySignatureCardPopup() {
+        documentPage.verifySignatureCardPopupDisplayed();
+    }
+
+    @When("I enter recipient  details {string}")
+    public void enterRecipientNameAndEmail(String recipientKey) {
+        String recipientEmail = JsonReader.getRecipientData(recipientKey, "recipientEmail");
+        String recipientName = JsonReader.getRecipientData(recipientKey, "name");
+
+        documentPage.addRecipientName(recipientEmail);
+        documentPage.addRecipientName(recipientName);
+    }
+
+    @And("I click the Assign button")
+    public void clickAssignButton() {
+        documentPage.clickAssignButton();
+    }
+
+    @Then("the signature assigned snackbar message should be displayed")
+    public void verifySignatureAssignedSnackbar() {
+        documentPage.verifySignatureAssignedSnackbar();
     }
 }
 

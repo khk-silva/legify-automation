@@ -24,12 +24,12 @@ public class LoginSteps {
     // ----------------------------
 
     @Given("I am on the login page")
-    public void i_am_on_login_page() {
+    public void navigateToLoginPage() {
         loginPage.verfiyLoginPage();
     }
 
     @When("I login with valid credentials")
-    public void i_login_with_valid_credentials() {
+    public void loginWithValidCredentials() {
         System.out.println("i_login_with_valid_credentials");
         String username = JsonReader.getUsername("validUser");
         String password = JsonReader.getPassword("validUser");
@@ -37,19 +37,19 @@ public class LoginSteps {
     }
 
     @Then("I should see the launchpad")
-    public void i_should_see_launchpad() {
+    public void verifyLaunchpadIsVisible() {
         loginPage.showLaunchpad();
     }
 
     @When("I login with invalid credentials")
-    public void i_login_with_invalid_credentials() {
+    public void loginWithInvalidCredentials() {
         String username = JsonReader.getUsername("invalidUser");
         String password = JsonReader.getPassword("invalidUser");
         loginPage.loginToApp(username, password);
     }
 
     @Then("I should see an error message")
-    public void i_should_see_error_message() {
+    public void verifyErrorMessageIsDisplayed() {
         String actualError = loginPage.getErrorMessage();
         String expectedError = "The email address or password you entered is incorrect. Please try again.";
         assertEquals(expectedError, actualError, "Error message mismatch");

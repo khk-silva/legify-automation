@@ -1,6 +1,6 @@
 {
   "validUser": {
-    "username": "bifixeb320@datehype.com",
+    "username": "testuser-111@echonlabs.com",
     "password": "H@12345678h"
   },
   "invalidUser": {
@@ -11,9 +11,9 @@
   "newUser1": {
 
     "salutation": "Mrs.",
-    "firstName": "Kasun",
-    "lastName": "Silva",
-    "email": "kto@test.com",
+    "firstName": "Maneesha",
+    "lastName": "Fernando",
+    "email": "dagow43933@lawior.com",
     "country": "Algeria",
     "role": "User"
   },
@@ -22,13 +22,13 @@
 
     "priority": "Low",
     "category": "Performance Issue",
-    "subject": "Test subject",
-    "description": "test Description"
+    "subject": "Test subject 2",
+    "description": "test Description 2"
   },
 
   "NewResource1": {
 
-    "title": "tESTuu1",
+    "title": "Employment Law",
     "type": "Statute",
     "applicableTypes": "Franchise Agreement",
     "jurisdiction": "Comoros",
@@ -39,17 +39,24 @@
 
   "NewUploadDoc1": {
 
-    "title": "tESTu3t3u1",
+    "title": "INTERNSHIP OFFER LETTER",
     "jurisdiction": "Algeria",
     "type": "Franchise Agreement",
     "recipient": "sss@gmail.com",
-    "fileName": "Remoly Employment Law.docx"
+    "fileName": "INTERNSHIP OFFER LETTER – QA ENGINEER INTERN.docx"
 
   },
 
-  "colloboratorKey": {
+  "collaboratorKey": {
 
     "collaboratorEmail": "hirunis@echonlabs.com"
+
+  },
+
+  "recipientKey": {
+
+    "recipientEmail": "hirunis@echonlabs.com",
+    "name": "Hiruni Silva"
 
   }
 }

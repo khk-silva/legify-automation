@@ -53,10 +53,29 @@ public class DocumentPage implements BasePage {
     private final By snackbarMessageBy = By.xpath("//simple-snack-bar//span"); // dummy
 
 
+    // ---------------- Signature & Stamp Locators ----------------
 
-//    public void visibilityHelper.waitForLoaderToDisappear() {
-//        hooks.getWait().until(ExpectedConditions.invisibilityOfElementLocated(loaderBy));
-//    }
+    // "Signature and Stamp" element in the side menu
+    private final By signatureElementBy = By.xpath("//span[text()='Signature and Stamp']");
+
+    // Document editor drop area
+    private final By documentEditorBy = By.cssSelector("div.empty-state.mt-1");
+
+    // Signature card popup title ("Assign New Signer")
+    private final By signatureCardPopupBy = By.xpath("//span[text()='Assign New Signer']");
+
+    // Recipient Name input
+    private final By recipientNameInputBy = By.xpath("//input[@placeholder='John Doe']");
+
+    // Recipient Email input
+    private final By recipientEmailInputBy = By.xpath("//input[@placeholder='Start by typing email']");
+
+    // Assign Button
+    private final By assignBtnBy = By.xpath("//button[normalize-space()='Assign']");
+
+    // Snackbar message after assigning signature
+    private final By signatureSnackbarBy = By.xpath("//simple-snack-bar//span[contains(text(),'assigned')]");
+
 
     // ---------------- Navigate to Document module ----------------
     public void navigateToDocumentModule() {
@@ -77,7 +96,7 @@ public class DocumentPage implements BasePage {
 
     // ---------------- Create New Document Button ----------------
     public void verifyAndClickCreateNewDocumentButton() {
-        visibilityHelper.safeSleep(35000);
+        visibilityHelper.safeSleep(25000);
         visibilityHelper.waitForLoaderToDisappear();
 
         By btnBy = By.xpath("//button[.//span[contains(text(),'Create New Document')]]");
@@ -91,7 +110,7 @@ public class DocumentPage implements BasePage {
     }
 
     public void clickCreateNewDocumentButton() {
-        visibilityHelper.safeSleep(35000);
+        visibilityHelper.safeSleep(15000);
         visibilityHelper.waitForLoaderToDisappear();
 
         By buttonBy = By.xpath("//span[i[contains(@class,'bi-plus')] and contains(., 'Create New Document')]");
@@ -115,7 +134,7 @@ public class DocumentPage implements BasePage {
 
     public void clickUploadDocumentOption() {
         visibilityHelper.waitForLoaderToDisappear();
-        visibilityHelper.safeSleep(15000);
+        visibilityHelper.safeSleep(10000);
 
         visibilityHelper.retryElementAction(() -> {
             WebElement uploadBtn = hooks.getWait().until(
@@ -206,7 +225,7 @@ public class DocumentPage implements BasePage {
         visibilityHelper.jsScrollToCenter(letsGoBtn);
         visibilityHelper.jsClick(letsGoBtn);
 
-        visibilityHelper.safeSleep(35000);
+        visibilityHelper.safeSleep(15000);
     }
 
     // ---------------- Popup Close ----------------
@@ -233,11 +252,12 @@ public class DocumentPage implements BasePage {
             );
             visibilityHelper.jsScrollToCenter(collabBtn);
             visibilityHelper.jsClick(collabBtn);
+            System.out.println("Collab button clicked");
         });
     }
 
     public void verifyCollaboratePopupDisplayed() {
-        visibilityHelper.safeSleep(5000);
+        visibilityHelper.safeSleep(2000);
         visibilityHelper.retryElementAction(() -> {
             WebElement popup = hooks.getWait().until(
                     ExpectedConditions.visibilityOfElementLocated(collaboratePopupBy)
@@ -247,7 +267,7 @@ public class DocumentPage implements BasePage {
     }
 
     public void addCollaboratorEmail(String email) {
-        visibilityHelper.safeSleep(5000);
+        visibilityHelper.safeSleep(2000);
         visibilityHelper.waitForLoaderToDisappear();
 
         visibilityHelper.retryElementAction(() -> {
@@ -260,7 +280,7 @@ public class DocumentPage implements BasePage {
     }
 
     public void clickInviteButton() {
-        visibilityHelper.safeSleep(15000);
+        visibilityHelper.safeSleep(5000);
         visibilityHelper.waitForLoaderToDisappear();
 
         visibilityHelper.retryElementAction(() -> {
@@ -269,6 +289,7 @@ public class DocumentPage implements BasePage {
             );
             visibilityHelper.jsScrollToCenter(btn);
             visibilityHelper.jsClick(btn);
+            visibilityHelper.safeSleep(15000);
         });
     }
 
@@ -280,6 +301,103 @@ public class DocumentPage implements BasePage {
             assertTrue(snack.isDisplayed(), "Snackbar message is not visible");
         });
     }
+
+
+    /**
+     * Scrolls the "sectionList" container fully to the top.
+     */
+    public void scrollSectionListToTop() {
+        try {
+            WebElement sectionList = hooks.getDriver().findElement(By.id("sectionList"));
+            ((JavascriptExecutor) hooks.getDriver())
+                    .executeScript("arguments[0].scrollTop = 0;", sectionList);
+            visibilityHelper.safeSleep(500);
+        } catch (Exception e) {
+            System.out.println("Failed to scroll sectionList to top: " + e.getMessage());
+        }
+    }
+
+
+
+    // ---------------- Drag & Drop Signature ----------------
+    public void dragAndDropSignatureIntoEditor() {
+        scrollSectionListToTop();
+        visibilityHelper.safeSleep(15000);
+        visibilityHelper.retryElementAction(() -> {
+            WebElement signature = hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(signatureElementBy));
+            WebElement editor = hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(documentEditorBy));
+
+            new org.openqa.selenium.interactions.Actions(hooks.getDriver())
+                    .dragAndDrop(signature, editor)
+                    .perform();
+        });
+    }
+
+    // ---------------- Click Signature Element ----------------
+    public void clickSignatureElement() {
+        visibilityHelper.safeSleep(15000);
+        visibilityHelper.retryElementAction(() -> {
+            WebElement signature = hooks.getWait().until(ExpectedConditions.elementToBeClickable(signatureElementBy));
+            visibilityHelper.jsScrollToCenter(signature);
+            signature.click();
+        });
+    }
+
+    // ---------------- Verify Signature Card Popup ----------------
+    public void verifySignatureCardPopupDisplayed() {
+        visibilityHelper.safeSleep(15000);
+        visibilityHelper.retryElementAction(() -> {
+            WebElement popup = hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(signatureCardPopupBy));
+            assertTrue(popup.isDisplayed(), "Signature Card popup is not visible");
+        });
+    }
+
+    // ---------------- Enter Recipient Name & Email ----------------
+
+    public void addRecipientName(String name) {
+        visibilityHelper.safeSleep(5000);
+        visibilityHelper.waitForLoaderToDisappear();
+
+        visibilityHelper.retryElementAction(() -> {
+            WebElement input = hooks.getWait().until(
+                    ExpectedConditions.elementToBeClickable(recipientNameInputBy)
+            );
+            input.sendKeys(name);
+            input.sendKeys(Keys.ENTER);
+        });
+    }
+
+    public void addRecipientEmail(String email) {
+        visibilityHelper.safeSleep(5000);
+        visibilityHelper.waitForLoaderToDisappear();
+
+        visibilityHelper.retryElementAction(() -> {
+            WebElement input = hooks.getWait().until(
+                    ExpectedConditions.elementToBeClickable(recipientEmailInputBy)
+            );
+            input.sendKeys(email);
+            input.sendKeys(Keys.ENTER);
+        });
+    }
+
+    // ---------------- Click Assign Button ----------------
+    public void clickAssignButton() {
+        visibilityHelper.safeSleep(15000);
+        visibilityHelper.retryElementAction(() -> {
+            WebElement btn = hooks.getWait().until(ExpectedConditions.elementToBeClickable(assignBtnBy));
+            visibilityHelper.jsScrollToCenter(btn);
+            visibilityHelper.jsClick(btn);
+        });
+    }
+
+    // ---------------- Verify Signature Snackbar ----------------
+    public void verifySignatureAssignedSnackbar() {
+        visibilityHelper.retryElementAction(() -> {
+            WebElement snack = hooks.getWait().until(ExpectedConditions.visibilityOfElementLocated(signatureSnackbarBy));
+            assertTrue(snack.isDisplayed(), "Signature assigned snackbar message is not visible");
+        });
+    }
+
 
 }
 

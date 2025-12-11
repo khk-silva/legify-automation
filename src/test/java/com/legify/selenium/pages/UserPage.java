@@ -78,7 +78,7 @@ public class UserPage implements BasePage {
 
     // ---------------- Create User ----------------
     public void clickCreateNewUserButton() {
-        visibilityHelper.safeSleep(45000); // keeping your original logic
+        visibilityHelper.safeSleep(10000); // keeping your original logic
 
         visibilityHelper.retryElementAction(() -> {
             visibilityHelper.jsScrollToCenter(createNewUserButton);

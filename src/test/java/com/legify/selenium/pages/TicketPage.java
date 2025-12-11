@@ -53,7 +53,7 @@ public class TicketPage implements BasePage {
 
     public void clickNeedAssistanceButton() {
         // Optional sleep if needed (keep original logic)
-        visibilityHelper.safeSleep(15000); // short wait for UI update
+        visibilityHelper.safeSleep(10000); // short wait for UI update
 
         // Retry click action using VisibilityHelper
         visibilityHelper.retryElementAction(() -> {
@@ -80,7 +80,7 @@ public class TicketPage implements BasePage {
 
     public boolean verifyTicketsPageVisible() {
 
-        visibilityHelper.safeSleep(15000); // short wait for UI update
+        visibilityHelper.safeSleep(10000); // short wait for UI update
 
         visibilityHelper.retryElementAction(() -> {
             WebElement header = hooks.getWait().until(
@@ -95,7 +95,7 @@ public class TicketPage implements BasePage {
     // ---------------- Open Ticket Window ----------------
 
     public void clickOpenTicketButton() {
-        visibilityHelper.safeSleep(5000); // your original logic
+        visibilityHelper.safeSleep(2000); // your original logic
 
         visibilityHelper.retryElementAction(() -> {
             visibilityHelper.jsScrollToCenter(openTicketButton);

@@ -20,7 +20,7 @@ public class ResourceSteps {
     private LoginPage loginPage;
 
     @Given("I am logged in with valid credentials3")
-    public void iAmLoggedInWithValidCredentials3() {
+    public void loginWithValidCredentials() {
         String username = JsonReader.getUsername("validUser");
         String password = JsonReader.getPassword("validUser");
 
@@ -29,28 +29,28 @@ public class ResourceSteps {
     }
 
     @When("I click the Resource menu icon")
-    public void iClickTheResourceMenuIcon() {
+    public void clickResourceMenuIcon() {
         resourcePage.navigateToResourceModule();
     }
 
     @Then("I should see the Resource page")
-    public void iShouldSeeTheResourcePage() {
+    public void verifyResourcePageIsVisible() {
         resourcePage.showResourcePage();
     }
 
     @When("I click the Create New Resource button")
-    public void iClickTheCreateNewResourceButton() {
+    public void clickCreateNewResourceButton() {
         resourcePage.clickCreateNewResourceButton();
 
     }
 
     @Then("I should see the Create New Resource window")
-    public void iShouldSeeTheCreateNewResourceWindow() {
+    public void verifyCreateNewResourceWindowIsVisible() {
         resourcePage.isResourceCreationWindowDisplayed();
     }
 
     @When("I fill the Resource form with test data {string}")
-    public void iFillResourceFormWithTestData(String resourceKey) {
+    public void fillResourceFormWithTestData(String resourceKey) {
         String title = JsonReader.getResourceData(resourceKey, "title");
         String type = JsonReader.getResourceData(resourceKey, "type");
         String applicableTypes = JsonReader.getResourceData(resourceKey, "applicableTypes");
@@ -78,12 +78,12 @@ public class ResourceSteps {
     }
 
     @And("I submit the new resource")
-    public void iSubmitTheNewResource() {
+    public void submitNewResource() {
         resourcePage.clickCreateButton();
     }
 
     @Then("The new resource should be created successfully {string}")
-    public void newResourceShouldBeCreatedSuccessfully( String resourceKey) {
+    public void verifyResourceCreatedSuccessfully( String resourceKey) {
         String title = JsonReader.getResourceData(resourceKey, "title");
         boolean isCreated = resourcePage.isResourceCreatedSuccessfully(title);
         System.out.println("Resource creation validation: " + isCreated);

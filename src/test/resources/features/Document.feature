@@ -14,7 +14,7 @@ Feature: Document Module
     When I click the Upload Document option
     Then I should see the "Upload Document" window
     When I fill the document form with test data "NewUploadDoc1"
-    And I submit the new document
+    And I create the new document
     And I click the Let's go Button
 #    Then the document should be created successfully
 
@@ -24,15 +24,17 @@ Feature: Document Module
     Given I have a document NewUploadDoc1 created
     When I click the Collaborate button
     Then the Collaborate popup should be displayed
-    When I add collaborator "colloboratorKey"
+    When I add collaborator "collaboratorKey"
     And I click the Invite button
 #    Then the collaborator added snackbar message should be displayed
 
 
-#
-#  @AddSignatureAndShare
-#  Scenario: Add signature card and share document to recipient
-#    Given a document is already created
-#    And I add a signature card for the user "Hiruni"
-#    When I share the signed document to recipient "test@mail.com"
-#    Then the recipient should receive the document for signing
+  @AddSignatureAndShare
+  Scenario: Add signature card and share document to recipient
+    Given I have a document NewUploadDoc1 created
+    When I drag and drop the Signature element into the document editor
+    And I click on the Signature element
+    Then the Signature card popup should be displayed
+    When I enter recipient  details "recipientKey"
+    And I click the Assign button
+##    Then the signature assigned snackbar message should be displayed
