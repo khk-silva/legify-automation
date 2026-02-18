@@ -1,10 +1,10 @@
 {
   "validUser": {
     "username": "hirunis@echonlabs.com",
-    "password": "H@12345678h"
+    "password": "password1"
   },
   "invalidUser": {
     "username": "hirunis@echonlabs.com",
-    "password": "H@12345678"
+    "password": "password2"
   }
 }
